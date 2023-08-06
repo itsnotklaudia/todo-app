@@ -1,5 +1,7 @@
 <?php
 
+include_once(__DIR__ . "/Db.php");
+
 class User {
     private $name;
     private $email;
@@ -20,6 +22,7 @@ class User {
      */ 
     public function setName($name)
     {
+        //check if name is not empty
         if (empty($name)) {
             throw new Exception('Make sure name is not empty.');
         }
@@ -44,10 +47,14 @@ class User {
      */ 
     public function setEmail($email)
     {
+        //check if email is not empty
         if (empty($email)) {
             throw new Exception('Make sure email is not empty.');
         }
 
+        //check if email is not already in use
+        //fetch all users by email
+        //if the count is larger than 0 -> email is already in use
         if (count($this->getByEmail($email)) > 0) {
             throw new Exception('Email is already in use.');
         }
@@ -58,11 +65,11 @@ class User {
     }
 
     /**
-     * Get the user by email
+     * Get all users by email (but it should only return one or none)
      */ 
     public function getByEmail($email)
     {
-        $conn = new PDO('mysql:host=localhost;dbname=todoapp23;port=8889', "root", "root");
+        $conn = Db::getConnection();
 
         $statement = $conn->prepare('select * from users where email = :email');
         $statement->bindValue(":email", $email);
@@ -93,10 +100,12 @@ class User {
      */ 
     public function setPassword($password)
     {
+        //check if password is not empty
         if (empty($password)) {
             throw new Exception('Make sure password is not empty.');
         }
 
+        //check if password has 8 or more characters
         if (strlen($password) < 8) {
             throw new Exception('Make sure password is 8 characters or longer.');
         }
@@ -105,6 +114,7 @@ class User {
             'cost' => 12
         ];
         
+        //hash the password with bcrypt
         $this->password = password_hash($password, PASSWORD_DEFAULT, $options);
 
         return $this;
@@ -113,7 +123,7 @@ class User {
     public function save()
     {
         //conn
-        $conn = new PDO('mysql:host=localhost;dbname=todoapp23;port=8889', "root", "root");
+        $conn = Db::getConnection();
 
         //query
         $statement = $conn->prepare("insert into users (name, email, password) values (:name, :email, :password)");
