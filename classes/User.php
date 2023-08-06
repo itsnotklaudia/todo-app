@@ -65,7 +65,7 @@ class User {
     }
 
     /**
-     * Get all users by email (but it should only return one or none)
+     * Get user by email (but it should only return one or none)
      */ 
     public function getByEmail($email)
     {
@@ -77,12 +77,12 @@ class User {
         $result = $statement->execute();
 
         if ($result) {
-            $users = $statement->fetchAll(PDO::FETCH_OBJ);
+            $user = $statement->fetch(PDO::FETCH_OBJ);
         } else {
             throw new Exception('Something went wrong!');
         }
 
-        return $users;
+        return $user;
     }
 
     /**
@@ -118,6 +118,17 @@ class User {
         $this->password = password_hash($password, PASSWORD_DEFAULT, $options);
 
         return $this;
+    }
+
+    public function canLogin($email, $password)
+    {
+        $user = $this->getByEmail($email);
+
+        if (count($user) === 0) {
+            return false;
+        }
+
+        return password_verify($password, $user->password);
     }
 
     public function save()
