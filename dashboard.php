@@ -1,5 +1,11 @@
 
-<!doctype html>
+<?php
+    session_start();
+
+    if (!isset($_SESSION['user'])) {
+        header("Location: login.php");
+    }
+?><!doctype html>
 <html lang="en" class="h-100" data-bs-theme="auto">
 <head>
     <base href="http://localhost:8888/todo/">
