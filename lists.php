@@ -117,7 +117,7 @@
         <?php endforeach; ?>
       <?php else: ?>
       <a href="#" class="list-group-item list-group-item-action d-flex justify-content-around align-items-center py-4 disabled">
-        <h5 class="mb-0">No lists found, add a new list first.</h5>
+        <h5 class="mb-0">It's pretty empty here... Get organized, create a list.</h5>
       </a>
       <?php endif; ?>
     </div>
