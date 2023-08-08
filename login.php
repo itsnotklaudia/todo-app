@@ -1,24 +1,34 @@
-
 <?php
+//include the user class so we can use it
 include_once(__DIR__ . "/classes/User.php");
 
+//start the session
 session_start();
 
+//check if the user is already logged in
+//if so: redirect to the dashboard
 if (isset($_SESSION['user'])) {
   header("Location: dashboard.php");
 }
 
+//check if the login form is submitted
 if (!empty($_POST)) {
+    //we will try logging in the user
+    //if it fails, catch the error
     try {
-        $user = new User();
+        $user = new User(); //instantiate the user class
 
-        $email = $_POST['email']; //@TODO: use setters to check if not empty
-        $password = $_POST['password'];
+        $email = $_POST['email']; //add email input to an 'email' variable
+        $password = $_POST['password']; //add password input to a 'password' variable
         
-        if ($user->canLogin($email, $password)) {
+        //check if the user can actually login (see if user exist + validate password)
+        if ($user->canLogin($email, $password)) { 
+          //the user can login so we add their email to the session
           $_SESSION['user'] = $email;
+          //then we will redirect the user to the dashboard
           header("Location: dashboard.php");
         } else {
+          //the user cannot login so we will throw an exception
           throw new Exception('E-mail or password incorrect.');
         }
     } catch (\Throwable $th) {
