@@ -122,12 +122,26 @@ class User {
 
     public function canLogin($email, $password)
     {
-        $user = $this->getByEmail($email);
-
-        if (count($user) === 0) {
-            return false;
+        //check if email is not empty
+        if (empty($email)) {
+            throw new Exception('Make sure email is not empty.');
         }
 
+        //check if password is not empty
+        if (empty($password)) {
+            throw new Exception('Make sure password is not empty.');
+        }
+
+        //get the user from the database
+        $user = $this->getByEmail($email);
+
+        //if there are no results then the user does not exist
+        if (empty($user)) {
+            throw new Exception('User not found.');
+        }
+
+        //check if the given password matches the one of the found user
+        //password_verify returns true or false
         return password_verify($password, $user->password);
     }
 
