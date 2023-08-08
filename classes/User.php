@@ -53,9 +53,9 @@ class User {
         }
 
         //check if email is not already in use
-        //fetch all users by email
-        //if the count is larger than 0 -> email is already in use
-        if (count($this->getByEmail($email)) > 0) {
+        //fetch the user by email
+        //if the result is not empty -> email is already in use
+        if (! empty($this->getByEmail($email))) {
             throw new Exception('Email is already in use.');
         }
         
