@@ -6,9 +6,9 @@ include_once(__DIR__ . "/classes/User.php");
 session_start();
 
 //check if the user is already logged in
-//if so: redirect to the dashboard
+//if so: redirect to the lists dashboard
 if (isset($_SESSION['user'])) {
-  header("Location: dashboard.php");
+  header("Location: lists.php");
 }
 
 //check if the login form is submitted
@@ -25,8 +25,8 @@ if (!empty($_POST)) {
         if ($user->canLogin($email, $password)) { 
           //the user can login so we add their email to the session
           $_SESSION['user'] = $email;
-          //then we will redirect the user to the dashboard
-          header("Location: dashboard.php");
+          //then we will redirect the user to the lists dashboard
+          header("Location: lists.php");
         } else {
           //the user cannot login so we will throw an exception
           throw new Exception('E-mail or password incorrect.');

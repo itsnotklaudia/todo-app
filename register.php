@@ -4,7 +4,7 @@ include_once(__DIR__ . "/classes/User.php");
 session_start();
 
 if (isset($_SESSION['user'])) {
-  header("Location: dashboard.php");
+  header("Location: lists.php");
 }
 
 if (!empty($_POST)) {
@@ -21,7 +21,7 @@ if (!empty($_POST)) {
 
         if ($user->save()) {
           $_SESSION['user'] = $user->getEmail();
-          header("Location: dashboard.php");
+          header("Location: lists.php");
         } else {
           throw new Exception('Something went wrong!');
         }
