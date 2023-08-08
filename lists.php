@@ -1,5 +1,6 @@
 <?php
 include_once(__DIR__ . "/classes/User.php");
+include_once(__DIR__ . "/classes/List.php");
 
 session_start();
 
@@ -10,7 +11,22 @@ if (!isset($_SESSION['user'])) {
 $user = new User();
 $user = $user->getByEmail($_SESSION['user']);
 
-$lists = [];
+$list = new TaskList();
+$lists = $list->all();
+
+if (!empty($_POST)) {
+  try {
+      $list->setName($_POST['name']);
+
+      if ($list->save()) {
+        header("Location: lists.php");
+      } else {
+        throw new Exception('Something went wrong!');
+      }
+  } catch (\Throwable $th) {
+      $error = $th->getMessage();
+  }
+}
 
 ?><!doctype html>
 <html lang="en" class="h-100" data-bs-theme="auto">
@@ -21,7 +37,7 @@ $lists = [];
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <title>Dashboard</title>
+    <title>Lists - Todo App</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 
@@ -106,18 +122,29 @@ $lists = [];
     <h1 class="mt-5 d-flex justify-content-between align-items-center">Lists</h1>
     <hr>
     <form action="" method="post">
-    <div class="input-group mb-3">
-      <input type="text" class="form-control form-control-lg" placeholder="Name" aria-label="Name" aria-describedby="button-addon2">
-      <button class="btn btn-outline-primary" type="button" id="button-addon2">Create list</button>
-    </div>
+      
+      <?php if (isset($error)): ?>
+      <div class="alert alert-danger" role="alert">
+        <?php echo $error; ?>
+      </div>
+      <?php endif; ?>
+
+      <div class="input-group mb-3">
+        <input type="text" class="form-control form-control-lg" name="name" placeholder="Name" aria-label="Name" aria-describedby="button-addon2">
+        <button class="btn btn-outline-primary" type="submit" id="button-addon2">Create list</button>
+      </div>
     </form>
     <hr>
     <div class="list-group">
       <?php if (count($lists) > 0): ?>
         <?php foreach($lists as $list): ?>
         <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
-          A simple default list group item
-          <span class="badge bg-primary rounded-pill">14</span>
+          <?php echo $list->name ?>
+          <div>
+            <span class="badge bg-primary rounded-pill me-2">14</span>
+            <button class="btn btn-sm btn-outline-default"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn btn-sm btn-outline-default"><i class="fa-solid fa-trash text-danger"></i></button>
+          </div>
         </a>
         <?php endforeach; ?>
       <?php else: ?>
@@ -136,5 +163,6 @@ $lists = [];
 </footer>
 
 <script src="assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/2fcfc739bc.js" crossorigin="anonymous"></script>
 </body>
 </html>
