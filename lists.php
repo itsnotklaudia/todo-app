@@ -1,12 +1,17 @@
-
 <?php
-    session_start();
+include_once(__DIR__ . "/classes/User.php");
 
-    if (!isset($_SESSION['user'])) {
-        header("Location: login.php");
-    }
+session_start();
 
-    $lists = [];
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+}
+
+$user = new User();
+$user = $user->getByEmail($_SESSION['user']);
+
+$lists = [];
+
 ?><!doctype html>
 <html lang="en" class="h-100" data-bs-theme="auto">
 <head>
@@ -85,9 +90,9 @@
       <a class="navbar-brand" href="#">TODO APP 23</a>
       <div class="dropdown-center">
         <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          USERNAME
+          <?php echo $user->name ?>
         </button>
-        <ul class="dropdown-menu">
+        <ul class="dropdown-menu dropdown-menu-end">
           <li><a class="dropdown-item" href="#">Logout</a></li>
         </ul>
       </div>
