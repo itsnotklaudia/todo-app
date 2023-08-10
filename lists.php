@@ -142,7 +142,7 @@ if (!empty($_POST)) {
           <?php echo $list->name ?>
           <div>
             <span class="badge bg-primary rounded-pill me-2">14</span>
-            <button class="btn btn-sm btn-outline-default"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button class="btn btn-sm btn-outline-default edit-list-btn" data-id="<?php echo $list->id ?>" data-name="<?php echo $list->name ?>"><i class="fa-solid fa-pen-to-square"></i></button>
             <button class="btn btn-sm btn-outline-default"><i class="fa-solid fa-trash text-danger"></i></button>
           </div>
         </a>
@@ -162,7 +162,32 @@ if (!empty($_POST)) {
   </div>
 </footer>
 
+<div class="modal fade" id="editListModal" tabindex="-1" aria-labelledby="listsEditModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="listsEditModalLabel">Edit list</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="listsEditInput" class="form-label">Name of the list</label>
+            <input type="text" class="form-control" id="listsEditInput" placeholder="Name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="listsIdInput">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script src="assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/2fcfc739bc.js" crossorigin="anonymous"></script>
+<script src="assets/js/lists.js"></script>
 </body>
 </html>
